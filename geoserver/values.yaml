@@ -1,11 +1,11 @@
-# Default values for metabase.
+# Default values for geoserver.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: metabase/metabase
+  repository: meteofi/geoserver
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -38,21 +38,26 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 3000
+  port: 8080
 
 ingress:
-  enabled: true
+  enabled: false
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: #metabase.mydomain.com
-      paths: [] 
-      #- path: /
+    - host: chart-example.local
+      paths: []
   tls: []
-   #- secretName: registry-ingress-cert
-   #  hosts:
-   #    - metabase.mydomain.com
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+dbConfig:
+  host: dbsrv1.vertechcon.lan
+  dbName: geoserver-db
+  username: geoserver-user
+  password: zOwW5BUY3ohTpfSAXR
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -78,9 +83,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-postgres:
-  dbname: metabase
-  hostname: dbhost
-  username: someusername
-  password: somepassword

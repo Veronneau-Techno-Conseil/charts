@@ -1,0 +1,32 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: registrypv
+spec:
+  capacity:
+    storage: 50Gi
+  nfs:
+    server: 10.13.0.20
+    path: /volume1/KubeData/registry
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: slow
+  volumeMode: Filesystem
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: registrypvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 30Gi
+  storageClassName: slow
+  volumeMode: Filesystem
+  volumeName: registrypv
