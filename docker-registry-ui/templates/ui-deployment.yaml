@@ -25,12 +25,18 @@ spec:
           env:
             - name: REGISTRY_TITLE
               value: {{ .Values.ui.title| quote }}
-            - name: DELETE_IMAGES
-              value: {{ .Values.ui.delete_images| quote }}
-            - name: {{ include "docker-registry-ui.url-name" . }}
-              value: {{ include "docker-registry-ui.url-value" . | quote }}
+            # - name: DELETE_IMAGES
+            #   value: {{ .Values.ui.delete_images| quote }}
+            # - name: {{ include "docker-registry-ui.url-name" . }}
+            #   value: {{ include "docker-registry-ui.proxy" . | quote }}
             - name: PULL_URL
               value: {{ include "docker-registry-ui.pull" . | quote }}
+            - name: SINGLE_REGISTRY
+              value: "false"
+            - name: NGINX_PROXY_PASS_URL
+              value: {{ include "docker-registry-ui.proxy" . | quote }}
+            # - name: REGISTRY_URL
+            #   value: {{ include "docker-registry-ui.pull" . | quote }}
           ports:
             - name: http
               containerPort: 80

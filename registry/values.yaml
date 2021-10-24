@@ -92,6 +92,9 @@ ui-certificate:
   keystores: {}
 
 ingress:
+    allowOrigin: true
+    allowMethods: "GET"
+    allowedOrigin: registryui.mydomain.com
     path: /
     # Used to create an Ingress record.
     host: registry.mydomain.com
@@ -128,7 +131,8 @@ registryui:
   registry:
     external: true
     # URL of the registry (requiered. Note: this wont work as localhost is inside the container. Only used if the registry is external)
-    url: registry.mydomain.com
+    url: https//registry.mydomain.com
+    proxy: https//registry.mydomain.com
 
   imagePullSecrets: []
   nameOverride: ""
