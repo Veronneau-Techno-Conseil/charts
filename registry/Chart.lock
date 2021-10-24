@@ -3,16 +3,16 @@ dependencies:
   repository: https://helm.twun.io
   version: 1.10.1
 - name: docker-registry-ui
-  repository: https://charts.vtck3s.lan
-  version: 0.1.4
+  repository: https://charts.vtck3s.lan/
+  version: 0.1.9
 - name: ca-issuer
-  repository: https://charts.vtck3s.lan
+  repository: https://charts.vtck3s.lan/
   version: 0.1.1
 - name: issuer-certificate
-  repository: https://charts.vtck3s.lan
+  repository: https://charts.vtck3s.lan/
   version: 0.1.1
 - name: issuer-certificate
-  repository: https://charts.vtck3s.lan
+  repository: https://charts.vtck3s.lan/
   version: 0.1.1
-digest: sha256:8a1dec5ebc21633a840956b40833729cf29ad54885737273944743bb887f5113
-generated: "2021-06-20T17:31:15.5833618-04:00"
+digest: sha256:44a1af3070cae44d410da92cf88707879f5bae091e441dd20c4ad2b98f99efcb
+generated: "2021-10-20T10:56:56.03801123-04:00"

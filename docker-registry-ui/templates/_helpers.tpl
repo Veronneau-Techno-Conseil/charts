@@ -101,8 +101,8 @@ URL
 {{- end -}}
 {{- end -}}
 
-{{- define "docker-registry-ui.url-value" -}}
-{{ .Values.registry.url }}
+{{- define "docker-registry-ui.proxy" -}}
+{{ .Values.registry.proxy }}
 {{- end -}}
 
 {{- define "docker-registry-ui.pull" -}}
