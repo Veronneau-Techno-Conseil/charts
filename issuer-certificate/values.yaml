@@ -1,6 +1,7 @@
 nameOverride:
 fullnameOverride:
 issuerRef: caissuer
+issuerKind: Issuer
 targetSecretName: testcert
 dnsNames:
   - my.cluster.local

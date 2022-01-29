@@ -6,6 +6,7 @@ spec:
   secretName: {{ .Values.targetSecretName }}
   issuerRef:
     name: {{ .Values.issuerRef }}
+    kind: {{ .Values.issuerKind }}
   {{- with  .Values.dnsNames }}
   dnsNames: {{ toYaml . | nindent 4 }}
   {{- end }}
