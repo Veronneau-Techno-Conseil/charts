@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "geoserver.fullname" . }}
+  name: {{ include "charmu.fullname" . }}
   labels:
-    {{- include "geoserver.labels" . | nindent 4 }}
+    {{- include "charmu.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "geoserver.selectorLabels" . | nindent 6 }}
+      {{- include "charmu.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,56 +18,45 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "geoserver.selectorLabels" . | nindent 8 }}
+        {{- include "charmu.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "geoserver.serviceAccountName" . }}
+      serviceAccountName: {{ include "charmu.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-      - name: geoserver-data
+      - name: charts-storage
         persistentVolumeClaim:
-          claimName: geosrv
-      - name: webapps
-        emptyDir: {}
-      - name: usrs
-        emptyDir: {}
+          claimName: {{ .Values.pvcName }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: STORAGE
+            value: local
+          - name: STORAGE_LOCAL_ROOTDIR
+            value: /charts
           volumeMounts:
-          - mountPath: "/opt/geoserver/data_dir"
-            name: geoserver-data
-          - mountPath: "/usr/local/tomcat/webapps"
-            name: webapps
-          - mountPath: "/usr/local/tomcat/conf"
-            name: usrs
+          - mountPath: /charts
+            name: charts-storage
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
-            - name: https
-              containerPort: 8443
-              protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /geoserver
-          #     port: http
-          #   initialDelaySeconds: 120
-          #   periodSeconds: 3
-          # readinessProbe:
-          #   httpGet:
-          #     path: /geoserver
-          #     port: http
-          # envFrom:
-          # - secretRef:
-          #     name: {{ include "geoserver.dbsecret" . }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

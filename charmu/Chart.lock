@@ -1,0 +1,6 @@
+dependencies:
+- name: issuer-certificate
+  repository: https://charts.vtck3s.lan/
+  version: 0.1.2
+digest: sha256:7931ecfa277ac8f710901925fdfab0476eddd80cccf98e51b3382d97a1a905ad
+generated: "2022-01-29T16:05:13.0120513-05:00"
