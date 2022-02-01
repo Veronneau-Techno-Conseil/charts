@@ -54,10 +54,10 @@ ingress:
   #      - chart-example.local
 
 dbConfig:
-  host: dbsrv1.vertechcon.lan
+  host: dbserver.domain.com
   dbName: geoserver-db
   username: geoserver-user
-  password: zOwW5BUY3ohTpfSAXR
+  password: password
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
