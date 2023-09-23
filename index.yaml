@@ -3,7 +3,7 @@ entries:
   clusterca-issuer:
   - apiVersion: v2
     appVersion: 0.1.1
-    created: "2023-09-23T12:08:46.075970489-04:00"
+    created: "2023-09-23T13:44:50.519225732-04:00"
     description: A Helm chart for Kubernetes ca issuer automated installation
     digest: 69b0e10a922150125c9774acb6a59815923dff2aa790b4f6a661bb9811774ea5
     name: clusterca-issuer
@@ -11,4 +11,32 @@ entries:
     urls:
     - https://github.com/Veronneau-Techno-Conseil/charts/clusterca-issuer-0.1.1.tgz
     version: 0.1.1
-generated: "2023-09-23T12:08:46.073864571-04:00"
+  vault:
+  - annotations:
+      charts.openshift.io/name: HashiCorp Vault
+    apiVersion: v2
+    appVersion: 1.14.1
+    created: "2023-09-23T13:44:50.52323743-04:00"
+    description: Official HashiCorp Vault Chart
+    digest: 9902489822a2f53c270c331b47703b454e205ff61ed50c185fa7978881469af9
+    home: https://www.vaultproject.io
+    icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
+    keywords:
+    - vault
+    - security
+    - encryption
+    - secrets
+    - management
+    - automation
+    - infrastructure
+    kubeVersion: '>= 1.20.0-0'
+    name: vault
+    sources:
+    - https://github.com/hashicorp/vault
+    - https://github.com/hashicorp/vault-helm
+    - https://github.com/hashicorp/vault-k8s
+    - https://github.com/hashicorp/vault-csi-provider
+    urls:
+    - https://github.com/Veronneau-Techno-Conseil/charts/vault-0.26.0.tgz
+    version: 0.26.0
+generated: "2023-09-23T13:44:50.517200279-04:00"
