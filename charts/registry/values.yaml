@@ -1,0 +1,101 @@
+
+registry: 
+  # Default values for docker-registry.
+  # This is a YAML-formatted file.
+  # Declare variables to be passed into your templates.
+  replicaCount: 1
+
+  updateStrategy: {}
+    # type: RollingUpdate
+    # rollingUpdate:
+    #   maxSurge: 1
+    #   maxUnavailable: 0
+
+  image:
+    repository: registry
+    tag: 2.7.1
+    pullPolicy: IfNotPresent
+  # imagePullSecrets:
+      # - name: docker
+  
+  securityContext:
+    enabled: true
+    runAsUser: 1000
+    fsGroup: 1000
+
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      cert-manager.io/cluster-issuer: "vault-issuer"
+    path: /
+    # Used to create an Ingress record.
+    hosts:
+      - registry.vtck3s.lan
+    #annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    #labels: {}
+    tls:
+      # Secrets must be manually created in the namespace.
+      - secretName: registry-ingress-cert
+        hosts:
+          - registry.vtck3s.lan
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+  persistence:
+    accessMode: 'ReadWriteOnce'
+    enabled: true
+    deleteEnabled: true
+    size: 30Gi
+    existingClaim: registrypvc
+    # storageClass: '-'
+
+  # set the type of filesystem to use: filesystem, s3
+  storage: filesystem
+
+  # Set this to name of secret for tls certs
+  # tlsSecretName: registry.docker.example.com
+  secrets:
+    haSharedSecret: ""
+    htpasswd: ""
+
+
+registryui:
+  # Default values for docker-registry-ui.
+  # This is a YAML-formatted file.
+  # Declare variables to be passed into your templates.
+
+  ui:
+    ingress:
+      enabled: true
+      annotations:
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+        cert-manager.io/cluster-issuer: "vault-issuer"
+      hosts:
+        - host: registryui.vtck3s.lan
+
+      tls:
+        - secretName: registryui-ingress-cert
+          hosts:
+            - registryui.vtck3s.lan
+
+
+  registry:
+    external: true
+    # URL of the registry (requiered. Note: this wont work as localhost is inside the container. Only used if the registry is external)
+    url: https//registry.vtck3s.lan
+    proxy: https//registry.vtck3s.lan
+
+  imagePullSecrets: []
+  nameOverride: ""

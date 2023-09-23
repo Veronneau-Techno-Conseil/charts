@@ -1,8 +1,0 @@
-
-nameOverride: 
-fullnameOverride: 
-path: "path to pki under /v1"
-url: "vault url"
-token: "vault token"
-caBundle: "bundle binary"
-skip: false

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{include "tls.name" .}}
+type: kubernetes.io/tls
+data:
+  # the data is abbreviated in this example
+  tls.crt: {{ .Values.tls.pem | b64enc }}
+  tls.key: {{ .Values.tls.key | b64enc }}

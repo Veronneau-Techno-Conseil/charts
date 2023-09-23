@@ -1,0 +1,42 @@
+        
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    job-name: refresh-token
+  name: refresh-token
+  namespace: vault-issuer
+spec:
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+            - args:
+                - /bin/sh
+                - '-c'
+                - >-
+                  curl -k --header "X-Vault-Token: ${TOKEN}" --request POST
+                  https://app01.vertechcon.lan:8200/v1/auth/token/renew-self
+              env:
+                - name: TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: token
+                      name: ca-issuer-secret
+                      optional: false
+              image: curlimages/curl
+              imagePullPolicy: Always
+
+  schedule: 0 1 1/1 * *
+  suspend: false
+#  startingDeadlineSeconds: int
+#  timeZone: string

@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/address-pool: pds-pool
+    metallb.universe.tf/loadBalancerIPs: 10.13.40.21
+  labels:
+    app: orch-mongodb-svc
+  name: mongodb-lb-svc-1
+  namespace: mongodb
+spec:
+  loadBalancerClass: metallb
+  ports:
+  - name: mongodb
+    port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    app: orch-mongodb-svc
+    statefulset.kubernetes.io/pod-name: orch-mongodb-1
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/address-pool: pds-pool
+    metallb.universe.tf/loadBalancerIPs: 10.13.40.22
+  labels:
+    app: orch-mongodb-svc
+  name: mongodb-lb-svc-2
+  namespace: mongodb
+spec:
+  loadBalancerClass: metallb
+  ports:
+  - name: mongodb
+    port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    app: orch-mongodb-svc
+    statefulset.kubernetes.io/pod-name: orch-mongodb-2
+  type: LoadBalancer

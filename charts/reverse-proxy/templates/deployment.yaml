@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "reverse-proxy.fullname" . }}
+  labels:
+    {{- include "reverse-proxy.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "reverse-proxy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "reverse-proxy.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "reverse-proxy.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: PROXY_SSL_CERT
+            value: /etc/ssl/private/priv.pem
+          - name: PROXY_SSL_CERT_KEY
+            value: /etc/ssl/private/priv.key
+          - name: server_name
+            value: '{{ .Values.config.upstreamSrv }}'
+          volumeMounts:
+            - name: configs-volume
+              mountPath: /etc/nginx/conf.d/
+            - name: certs
+              mountPath: /etc/ssl/private/priv.pem
+              subPath: tls.crt
+            - name: certs
+              mountPath: /etc/ssl/private/priv.key
+              subPath: tls.key
+          ports:
+            - name: https
+              containerPort: 443
+              protocol: TCP
+            - name: http
+              containerPort: 80
+              protocol: TCP
+
+      volumes:
+        - name: configs-volume
+          configMap:
+            name: "{{- include "nginx-config.name" . }}"
+        - name: certs
+          secret:
+            secretName: {{ include "tls.name" .}}
+        # - name: certs
+        #   secret:
+        #     secretName: {{ include "tls.name" .}}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

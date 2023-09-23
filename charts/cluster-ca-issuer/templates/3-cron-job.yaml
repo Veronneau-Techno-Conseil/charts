@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    job-name: {{ include "caissuer.name" . }}-refresh-token
+  name: {{ include "caissuer.name" . }}-refresh-token
+  namespace: cert-manager
+spec:
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: "container-0"
+              args:
+                - /bin/sh
+                - '-c'
+                - >-
+                  curl -k --header "X-Vault-Token: ${TOKEN}" --request POST
+                  {{ .Values.url }}/v1/auth/token/renew-self
+              env:
+                - name: TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: token
+                      name: {{ include "caissuer.secretname" . }}
+                      optional: false
+              image: curlimages/curl
+              imagePullPolicy: Always
+
+  schedule: {{ .Values.refresh.schedule }}
+  suspend: false

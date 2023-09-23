@@ -1,0 +1,9 @@
+dependencies:
+- name: docker-registry
+  repository: https://helm.twun.io
+  version: 1.10.1
+- name: docker-registry-ui
+  repository: https://charts.vtck3s.lan/
+  version: 0.1.9
+digest: sha256:d0f465faebd3cd99868dbfd8b968a537c8e6c33a6c7f014fa0642fd8fc92fc30
+generated: "2022-04-02T23:24:57.5067689-04:00"

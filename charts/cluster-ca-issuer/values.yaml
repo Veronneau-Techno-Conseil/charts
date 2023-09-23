@@ -1,0 +1,10 @@
+
+nameOverride: 
+fullnameOverride: 
+path: "/path/to/pki/under/v1"
+url: "https://vaulturl.domain.com:8200/"
+token: "vaulttoken64584d6c1s6d41c61sd651c65sd1"
+caBundle: "bundlebinary6erw85v4e651r6e14gv6e54rv414"
+skip: false
+refresh:
+  schedule: "0 1 1/1 * *"

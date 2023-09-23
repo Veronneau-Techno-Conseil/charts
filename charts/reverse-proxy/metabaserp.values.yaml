@@ -1,0 +1,160 @@
+# Default values for reverse-proxy.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  lbc: nginx-comax
+  annotations: 
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: metabase.communaxiom.org
+      paths:
+        - path: /
+  tls: 
+  - hosts:
+      - metabase.communaxiom.org
+    secretName: metabase-tls
+
+config:
+  upstream: https://metabase.pdsk3s.lan
+  dns: 10.10.0.2
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+tls:
+  pem: |-
+    -----BEGIN CERTIFICATE-----
+    MIIDfzCCAmegAwIBAgIUEbGFN27gPZA5oK8+GvCK/urt+uYwDQYJKoZIhvcNAQEL
+    BQAwODE2MDQGA1UEAxMtVmVyb25uZWF1IFRlY2huby4gQ29uc2VpbCBpbmMuIElu
+    dGVybWVkaWF0ZSAxMB4XDTIxMDQxOTAxNTQyN1oXDTIyMDQxOTAxNTQ1N1owIjEg
+    MB4GA1UEAxMXbWV0YWJhc2UudmVydGVjaGNvbi5sYW4wggEiMA0GCSqGSIb3DQEB
+    AQUAA4IBDwAwggEKAoIBAQDYn6VCvYKtHnRB7g9xX0T4v2nur60N8/rdqJKvO9vy
+    HSBpl7IfRgRvJ45tYl6nOJygpeiDwe3CCzUqyvF2CDG3hFyZPF26GT4/cUZtxgR8
+    pQ+p2lljOW3E/bIIzeSSEu52rDjqW7weD90OqipS49X7zH0Xn4fl58M+slJKaDDM
+    xqr4EylfMNw18qCHRAa6gXhBFWgriFOXIqMcAZU2qsTp6KQei8uhuIWLxrm/bGgW
+    jLjFVHsnFbVq7m9a9ABCJ/SNpoHXY+0nuaDdw9JpI8CQTGZzyZEU3bXRO449e3UL
+    N5gN40g9TAm5k8CV+CjSjhExrkszGjJ7o59iudGnC26DAgMBAAGjgZYwgZMwDgYD
+    VR0PAQH/BAQDAgOoMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAdBgNV
+    HQ4EFgQU9p73PSSG5HVcFr00RkCrSrN86iQwHwYDVR0jBBgwFoAUCpR5yleCxzfA
+    HIoyP//unWzGmjswIgYDVR0RBBswGYIXbWV0YWJhc2UudmVydGVjaGNvbi5sYW4w
+    DQYJKoZIhvcNAQELBQADggEBAJ483DIVAmBWGeS82WJWAz3tXiWyiyiAB4BjgiqB
+    VLT0clvn5GNOKzr32M/+Ek7yoATJ6io6KDYFCjpQDuE2/pA2ifvv86SSH7vCuVma
+    xDSLaSNixVYLqIP6X9izw6vJRqFCkIpa8J0dlJQ0aTmko6I+t8BNdoVFbLRUbgvl
+    7yR22cz2f2KC/Qkt2wR75aiit9//1CZAVltlTPsQ55g4BmCtJt9lhSu/I71RQjgE
+    qd3SmXizpZA+T78DJOorzUfcxXOnn7RMBAKpkfOR8UUAn+fE+jstRXmXcRd1OIku
+    atlZGJL33HEEtGPFhNWs015t1QBYPU6tAdk+fXnfpfZ55yc=
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIDjzCCAnegAwIBAgIUBX1QXbuL4WqxehzTVdaNJyfR5hQwDQYJKoZIhvcNAQEL
+    BQAwZjEmMCQGA1UEChMdVmVyb25uZWF1IFRlY2huby4gQ29uc2VpbCBpbmMxPDA6
+    BgNVBAMTM1Zlcm9ubmVhdSBUZWNobm8uIENvbnNlaWwgaW5jIENlcnRpZmljYXRl
+    IEF1dGhvcml0eTAeFw0yMTAzMDMxODEzMjNaFw0zMTAzMDExODEzNTNaMDgxNjA0
+    BgNVBAMTLVZlcm9ubmVhdSBUZWNobm8uIENvbnNlaWwgaW5jLiBJbnRlcm1lZGlh
+    dGUgMTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOKpBc59Dax/Zk9A
+    vRwl3mOfNkQyyPuNV/udvoKiChaMYKlcmOyX/GhHULGF41aj9p7h0AdLS2eq+RQf
+    d8iCPMPhC3ZmCfDjeeVBLbVJk9XlT5CnDw8SelDKsvnx+cxDGmQzxImnWczeKda8
+    LFq+RGMfKMD7ZYFwy76hkUlyuj5lP4px3TYrlIuIQYH4ijPVbjJk7dwNe+fjJczX
+    jrETJj/LpWdPI6+L3R5N0jLYMJvUNXOvU5RJ8YbIhyUKHQucdqYPSsTlY1qHIbYa
+    Ue/Tu6GkE7qwBokJu4axMHLMZLitg3EdlvOBzglMOlnO7q1g+64+kFo4R6z54bOU
+    sCGt50MCAwEAAaNjMGEwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8w
+    HQYDVR0OBBYEFAqUecpXgsc3wByKMj//7p1sxpo7MB8GA1UdIwQYMBaAFOuHlnks
+    BhhWUi7n9YEXrZipO9KqMA0GCSqGSIb3DQEBCwUAA4IBAQALULxdaqGs5Tgg23yn
+    fzTi8nkcGA32GSZwsIYQxgffLHxbFXY8xJGVP+vZcA+dGonV9SEuV+2WwD1Bhd1J
+    KHU8czRo/phnyMJJ/cubGQvKXUkzVOpLP7Oyt5qFPr7txi2jMb2lS+tAKc6cB3HK
+    /WKlfSgL18TrrhxD+VDSealVc4XvSmzCKudPK1AbcOcdfYBzT/hhxl1PtQKd4TgN
+    nlKWiEiUVztuBe5gHRdaIoLNUEyD3egwOKqQbFgzcmU8zMFkaIdgwM3YgZklS3F7
+    2xa2zaNwHiyiHcwBotNYwAdZWCVKN7Z/JEjWGmk461Q/4IZtnMnaxOUVWKQTOKks
+    f68U
+    -----END CERTIFICATE-----
+  key: |-
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpgIBAAKCAQEA2J+lQr2CrR50Qe4PcV9E+L9p7q+tDfP63aiSrzvb8h0gaZey
+    H0YEbyeObWJepzicoKXog8Htwgs1Ksrxdggxt4RcmTxduhk+P3FGbcYEfKUPqdpZ
+    YzltxP2yCM3kkhLudqw46lu8Hg/dDqoqUuPV+8x9F5+H5efDPrJSSmgwzMaq+BMp
+    XzDcNfKgh0QGuoF4QRVoK4hTlyKjHAGVNqrE6eikHovLobiFi8a5v2xoFoy4xVR7
+    JxW1au5vWvQAQif0jaaB12PtJ7mg3cPSaSPAkExmc8mRFN210TuOPXt1CzeYDeNI
+    PUwJuZPAlfgo0o4RMa5LMxoye6OfYrnRpwtugwIDAQABAoIBAQC0J9FhOAq9v14g
+    lsPxHbJWzZpkD2Z0/DverJuRcM7zBJY4OxjAOZLmfpdNEUp29/YLBO/i5B3AC2Ik
+    PLOj3hy66zG3nySz6NqEGMjh8pU4tG3abOV6SACqm/K8r78wXN5Fg+Wxwqkotzi5
+    QXwBg8oqp15Bj0OOSLlwIw2dJBmxst+idC/eLhRHbA/vpUkIOCLtu8ec1kDEoCY3
+    A4Iiaa7kGIrz/QLdLmY+eezhq2F9g9rRRFEiuHah0h6bTn23DIJ02EkvNLkYF4A1
+    /miEnKGBybzU0XWXrSvNREI2yLro22RZCO7HgmHbr2PQvfECXd2n27x0PmbaQVMF
+    q1HxxdABAoGBAN7cc/ailwsil5jI51wUjZHy8onTGD9wr7MbLuVR51J/V5qUDVjt
+    +Yxumbiz0mnZl1x+ImJk+xqlafCXwzvPG5DBhc+vQbecUSbNR3q/bqfcA0HrVG7w
+    HKQb4CXGkAi3NdQ9PGLZs9JanUsbrdDvuUmwAHsz29X6o1p7CAxUrPuDAoGBAPjV
+    wGdeVZGMMibDaPzzIHL1k9UGHtoyF83jizavif0BDtf1Ps0PbHEbOJlbv42yNKK1
+    JRWbPl6tlB/cCpYOOT9hcFO7jRJZ/nAoA6hl3CVf4GO0KmKKy6YoHIwSUSGfA9g8
+    NHr5U49X98bAldx80dktd2IgjzVsLvzqaFnB7lEBAoGBALZOaoJoUNzoCFEQj8pQ
+    edrZfbRnPZ+v49rFMuCe1ncy+ovV7vE/gvNxCkkAuPCj8eDUwfXxm0QZ6obI7wl/
+    C5Kn7HmPaVf1BKGULZPpA3FHVlbXVnOF8jgBIaRlQTAQB3W+Piay5hn+zEtDsjWH
+    1O/FjS87peruJDEBEf1cS0FXAoGBALRKS0mZ8+2s4nlrhBoiHhStEht6f8ggG1c1
+    0pwgu53wskyOiJ4S2sNosa2L6FJGGBT7oo7xGFOI+JXM3G60h44Aj15buW7efZfN
+    pjjQ9Jyvxuj2lO8pGTyeO3DRpK7zg9mcZXnkRELLvd7nkq1aUsFETAdxB9HxPGpL
+    fKfr9zwBAoGBALyLYTHTe+zdk5up7Pp2rFpUSwWYNDE5NnxyYUa/AmX60/TuQ/LI
+    39jyxAbrHtuttnfWEfG00ijbEvdTZne7d9/YuXzDoduZP9VVwZKPZoJwV17X4o/Y
+    7vkYLj2wd873HA5lhmfHswJv8qIvxbVHvcOl2rBm3PpLHsPThgILy8rJ
+    -----END RSA PRIVATE KEY-----
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
