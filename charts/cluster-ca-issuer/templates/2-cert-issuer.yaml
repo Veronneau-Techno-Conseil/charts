@@ -2,7 +2,7 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
- name: {{- include "caissuer.name" -}}
+ name: {{ include "caissuer.name" . }}
 spec:
   vault:
     path: "{{ .Values.path }}"

@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  clusterca-issuer:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2023-09-23T12:08:46.075970489-04:00"
+    description: A Helm chart for Kubernetes ca issuer automated installation
+    digest: 69b0e10a922150125c9774acb6a59815923dff2aa790b4f6a661bb9811774ea5
+    name: clusterca-issuer
+    type: application
+    urls:
+    - https://github.com/Veronneau-Techno-Conseil/charts/clusterca-issuer-0.1.1.tgz
+    version: 0.1.1
+generated: "2023-09-23T12:08:46.073864571-04:00"
