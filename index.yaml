@@ -9,7 +9,7 @@ entries:
     name: clusterca-issuer
     type: application
     urls:
-    - https://djp65hxq6jm81.cloudfront.net/clusterca-issuer-0.1.1.tgz
+    - https://github.com/Veronneau-Techno-Conseil/charts/raw/main/clusterca-issuer-0.1.1.tgz
     version: 0.1.1
   vault:
   - annotations:
